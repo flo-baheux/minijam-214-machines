@@ -7,18 +7,42 @@ using UnityEngine.UI;
 namespace Laywelin {
   public class UISceneTransition : MonoBehaviour {
     [SerializeField] private RectTransform sceneTransitionContainer;
+    [SerializeField] private CanvasGroup canvas, delayedCanvasGroup;
     [SerializeField] private Image progressBarFill;
     [SerializeField] private TextMeshProUGUI progressPercentageText;
 
-    public void ShowTransition(Action callback = null) {
-      sceneTransitionContainer.anchoredPosition = new(1280, sceneTransitionContainer.anchoredPosition.y);
+    private void Awake() {
       progressBarFill.fillAmount = 0;
       progressPercentageText.text = "";
-      sceneTransitionContainer.DOAnchorPosX(0, 2f).SetEase(Ease.OutExpo).OnComplete(() => callback?.Invoke());
+      canvas.Toggle(false);
+      delayedCanvasGroup.Toggle(false);
+    }
+
+    public void ShowTransition(Action callback = null) {
+      delayedCanvasGroup.DOKill();
+      delayedCanvasGroup.Toggle(false);
+      canvas.DOFade(1, 2f).SetEase(Ease.Linear).OnComplete(() => {
+        callback?.Invoke();
+        delayedCanvasGroup.DOFade(1, 0.4f).From(0);
+      });
     }
 
     public void HideTransition(Action callback = null) {
-      sceneTransitionContainer.DOAnchorPosX(-1280, 2f).SetEase(Ease.InExpo).OnComplete(() => callback?.Invoke());
+      delayedCanvasGroup.DOKill();
+      delayedCanvasGroup.DOFade(0, 0.4f);
+      canvas.DOFade(0, 2f).SetEase(Ease.Linear).OnComplete(() => callback?.Invoke());
+    }
+
+    private void Update() {
+      if (SceneTransitionManager.Instance == null)
+        return;
+
+      if (!SceneTransitionManager.Instance.IsTransitioning)
+        return;
+
+      progressBarFill.fillAmount = SceneTransitionManager.Instance.sceneTransitionProgress;
+      progressPercentageText.text = $"{SceneTransitionManager.Instance.sceneTransitionProgress * 100}%";
+
     }
   }
 }

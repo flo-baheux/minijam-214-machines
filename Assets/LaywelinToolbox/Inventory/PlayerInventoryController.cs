@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Laywelin {
   public class PlayerInventoryController {
     private readonly Inventory inventory = new();
@@ -19,7 +21,7 @@ namespace Laywelin {
 
     public bool TryRemoveItem(ItemData item, int quantity) {
       int countBefore = inventory.Count(item);
-
+      
       if (!inventory.TryRemoveItem(item, quantity))
         return false;
 

@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryItemUI: MonoBehaviour {
-    [SerializeField] private TextMeshProUGUI name;
+    // [SerializeField] private TextMeshProUGUI name;
     [SerializeField] private Image icon;
 
+    private ItemData item;
+    
     public void Init(ItemData item) {
-      name.text = item.displayName;
+      this.item = item;
+      // name.text = item.displayName;
       icon.sprite = item.displayIcon;
     }
-  }
+}

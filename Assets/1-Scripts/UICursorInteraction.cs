@@ -18,15 +18,7 @@ public class UICursorInteraction : MonoBehaviour {
     cursorIcon.color = cannotInteractColor;
     cursorIcon.transform.localScale = Vector3.one * cannotInteractScale;
   }
-
-  private void Start() {
-    GlobalGameManager.Instance.OnGameplayModeChanged += OnGameplayModeChangedHandler;
-  }
-
-  private void OnGameplayModeChangedHandler(GameplayMode prev, GameplayMode current) {
-    canvasGroup.Toggle(current == GameplayMode.LOOK_AROUND);
-  }
-
+  
   private void OnInteractionTargetChangedHandler(IInteractableElement interactTarget) {
     tween?.Kill();
 

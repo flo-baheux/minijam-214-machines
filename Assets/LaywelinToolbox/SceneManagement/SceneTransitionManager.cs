@@ -17,6 +17,7 @@ namespace Laywelin {
     
     private SceneBootstrapper currentLoadingSceneBootstrapper;
     private bool isTransitioning;
+    public bool IsTransitioning => isTransitioning;
     
     private void Awake() {
       // == SINGLETON IMPLEMENTATION ==

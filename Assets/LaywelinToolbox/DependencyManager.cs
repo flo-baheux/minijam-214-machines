@@ -1,6 +1,3 @@
-using System;
-using DG.Tweening;
-using UnityEditor;
 using UnityEngine;
 
 namespace Laywelin {
@@ -10,5 +7,15 @@ namespace Laywelin {
 
     [SerializeField] private InputHandler _inputHandler;
     public InputHandler InputHandler => _inputHandler;
+
+    private void Awake() {
+      if (Instance != null && Instance != this) {
+        Destroy(gameObject);
+        return;
+      }
+
+      Instance = this;
+      DontDestroyOnLoad(gameObject);
+    }
   }
 }
